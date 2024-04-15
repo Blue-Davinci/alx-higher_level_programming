@@ -1,32 +1,31 @@
 #!/usr/bin/python3
-"""
-    script that takes in an argument and displays all values in the
-    states table of hbtn_0e_0_usa where name matches the argument.
-"""
-from sys import argv
+"""2. Filter states by user input
+takes in an argument and displays all values in the states table of
+hbtn_0e_0_usa where name matches the argument."""
 import MySQLdb
+import sys
+
+
 if __name__ == "__main__":
-    conn = MySQLdb.connect(
-        host="localhost",
-        port=3306,
-        user=argv[1],
-        passwd=argv[2],
-        db=argv[3],
-        charset="utf8")
-    cur = conn.cursor()
-    try:
-        search = argv[4]
-        stmt = """
-        SELECT * FROM states WHERE name LIKE BINARY '{:s}' ORDER BY id ASC;
-        """.format(search)
-        cur.execute(stmt)
-        rtn = cur.fetchall()
-    except MySQLdb.Error:
-        try:
-            rtn = ("MySQLdb Error")
-        except IndexError:
-            rtn = ("MySQLdb Error - IndexError")
-    for i in rtn:
-        print(i)
-    cur.close()
-    conn.close()
+    host = "localhost"
+    user = sys.argv[1]
+    password = sys.argv[2]
+    name = sys.argv[3]
+    port = 3306
+    state_name = sys.argv[4]
+
+    query = "SELECT * FROM states WHERE name LIKE BINARY '{}'\
+            ORDER BY id ASC".format(state_name)
+    db = MySQLdb.connect(
+        host=host, user=user, passwd=password, db=name, port=port
+    )
+    cursor = db.cursor()
+
+    cursor.execute(query)
+    rows = cursor.fetchall()
+
+    for row in rows:
+        print(row)
+
+    cursor.close()
+    db.close()
