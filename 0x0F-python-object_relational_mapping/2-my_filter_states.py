@@ -18,8 +18,8 @@ if __name__ == "__main__":
 # iteration snipped.
 """
     
-    sql = "SELECT * FROM states WHERE name='{}'".format(argv[4])
-    cur.execute(sql)
+    sql = "SELECT * FROM states WHERE name='{}'")
+    cur.execute(sql.format(argv[4])
     rows = cur.fetchall()
     for row in rows:
         if row[1] == argv[4]:
