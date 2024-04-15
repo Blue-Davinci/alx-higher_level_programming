@@ -11,8 +11,14 @@ if __name__ == "__main__":
     db = MySQLdb.connect(host="localhost", port=3306,
                          user=argv[1], passwd=argv[2], db=argv[3])
     cur = db.cursor()
-    sql = "SELECT * FROM states WHERE name='{:s}'\
-    ORDER BY states.id".format(argv[4])
+"""
+# declarations and connection creation snipped.
+    command = """SELECT * FROM states WHERE name='{}'"""
+    cur.execute(command.format(to_find))
+# iteration snipped.
+"""
+    
+    sql = "SELECT * FROM states WHERE name='{}'".format(argv[4])
     cur.execute(sql)
     rows = cur.fetchall()
     for row in rows:
