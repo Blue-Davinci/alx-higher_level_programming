@@ -1,8 +1,8 @@
 # --- docs and shebang snipped ---
+import sys
+import MySQLdb
+
 if __name__ == '__main__':
-    import sys
-    import MySQLdb
-    
     db_user = sys.argv[1]
     db_password = sys.argv[2]
     db_name = sys.argv[3]
