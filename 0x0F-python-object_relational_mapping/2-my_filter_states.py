@@ -1,31 +1,27 @@
-#!/usr/bin/python3
-"""2. Filter states by user input
-takes in an argument and displays all values in the states table of
-hbtn_0e_0_usa where name matches the argument."""
-import MySQLdb
-import sys
-
-
-if __name__ == "__main__":
-    host = "localhost"
-    user = sys.argv[1]
-    password = sys.argv[2]
-    name = sys.argv[3]
-    port = 3306
-    state_name = sys.argv[4]
-
-    query = "SELECT * FROM states WHERE name LIKE BINARY '{}'\
-            ORDER BY id ASC".format(state_name)
+# --- docs and shebang snipped ---
+if __name__ == '__main__':
+    import sys
+    import MySQLdb
+    
+    db_user = sys.argv[1]
+    db_password = sys.argv[2]
+    db_name = sys.argv[3]
+    to_find = sys.argv[4]
+    
     db = MySQLdb.connect(
-        host=host, user=user, passwd=password, db=name, port=port
+        user=db_user,
+        passwd=db_password,
+        database=db_name,
+        host='localhost',
+        port=3306,
     )
-    cursor = db.cursor()
-
-    cursor.execute(query)
-    rows = cursor.fetchall()
-
-    for row in rows:
-        print(row)
-
-    cursor.close()
+    
+    cur = db.cursor()
+    command = """SELECT * FROM states WHERE name='{}'"""
+    cur.execute(command.format(to_find))
+    
+    for pair in cur.fetchall():
+        print(pair)
+    
+    cur.close()
     db.close()
