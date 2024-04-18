@@ -21,5 +21,5 @@ def filterbyusrinput():
         print(e)
 
 
-if __name == '__main':
+if __name__ == '__main__':
     filter_by_usr_input()
