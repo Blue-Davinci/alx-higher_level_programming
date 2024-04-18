@@ -1,42 +1,34 @@
 #!/usr/bin/python3
-"""
-This script takes in an argument and
-displays all values in the states
-where `name` matches the argument
-from the database `hbtn_0e_0_usa`.
-
-This time the script is safe from
-MySQL injections!
-"""
+"""  lists all states from the database hbtn_0e_0_usa where name matches
+    the argument that is safe from MySQL injections"""
 
 import MySQLdb
-from sys import argv
+import sys
 
-if __name__ == '__main__':
+
+def main():
     """
-    Access to the database and get the states
-    from the database.
+    Connects to a MySQL database and lists states where the name matches
+    the argument provided, ensuring safety from MySQL injections.
+
+    Usage:
+        python script.py <username> <password> <database_name> <state_name>
     """
+    db_connection = MySQLdb.connect(user=sys.argv[1], passwd=sys.argv[2],
+                                    db=sys.argv[3])
 
-    db = MySQLdb.connect(host="localhost", user=argv[1], port=3306,
-                         passwd=argv[2], db=argv[3])
+    cursor = db_connection.cursor()
 
-    with db.cursor() as cur:
-        cur.execute("""
-            SELECT
-                *
-            FROM
-                states
-            WHERE
-                name LIKE BINARY %(name)s
-            ORDER BY
-                states.id ASC
-        """, {
-            'name': argv[4]
-        })
+    search_states = sys.argv[4]
 
-        rows = cur.fetchall()
+    cursor.execute("SELECT * FROM states WHERE name=%s", (search_states, ))
+    result = cursor.fetchall()
+    for row in result:
+        print(row)
 
-    if rows is not None:
-        for row in rows:
-            print(row)
+    cursor.close()
+    db_connection.close()
+
+
+if __name__ == "__main__":
+    main()
