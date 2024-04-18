@@ -1,34 +1,25 @@
 #!/usr/bin/python3
-"""  lists all states from the database hbtn_0e_0_usa where name matches
-    the argument"""
-import MySQLdb
+""" 2. Filter states by user input """
 import sys
+import MySQLdb
 
 
-def main():
-    """
-    Connects to a MySQL database and searches for a specific state name.
-
-    Usage:
-        python script.py <username> <password> <database_name> <state_name>
-    """
-    db_connection = MySQLdb.connect(user=sys.argv[1], passwd=sys.argv[2],
-                                    db=sys.argv[3])
-
-    cursor = db_connection.cursor()
-
-    search_states = sys.argv[4]
-
-    cursor.execute("SELECT * FROM states WHERE name LIKE BINARY '{}'"
-                   .format(search_states))
-
-    result = cursor.fetchall()
-    for row in result:
-        print(row)
-
-    cursor.close()
-    db_connection.close()
+def filterbyusrinput():
+    """ script that takes in an argument and displays all values """
+    try:
+        usrinput = sys.argv[4]
+        with MySQLdb.connect(
+            "localhost", sys.argv[1], sys.argv[2], sys.argv[3], port=3306
+                ) as db:
+            with db.cursor() as cur:
+                cur.execute("""SELECT id, name FROM states
+                WHERE name = BINARY '{:s}' ORDER BY id ASC;
+                    """.format(usr_input))
+                for r in cur.fetchall():
+                    print(r)
+    except Exception as e:
+        print(e)
 
 
-if __name__ == "__main__":
-    main()
+if __name == '__main':
+    filter_by_usr_input()
